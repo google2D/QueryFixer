@@ -7,7 +7,7 @@ app = Flask(__name__)
 CORS(app)
 
 # Set your OpenAI API key
-openai.api_key = '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'  # Make sure to replace this with your actual API key
+openai.api_key = '':
 
 @app.route('/fix-query', methods=['POST'])
 def fix_query():
