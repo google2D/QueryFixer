@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Query Validator</title>
+    <link rel="stylesheet" href="../front-end/css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Search Query Validator</h1>
+        <form id="query-form">
+            <label for="search-query">Enter your search query:</label>
+            <input type="text" id="search-query" placeholder="Type your search query here..." required>
+            <button type="submit">Validate</button>
+        </form>
+        <div id="result">
+            <p id="status"></p>
+            <p id="suggestion" class="hidden"></p>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
