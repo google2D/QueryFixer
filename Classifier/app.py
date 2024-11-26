@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify
-import Model
-import Encoder
+from Model import Model
+from Encoder import Encoder
 
 # Initialize Flask app
 app = Flask(__name__)
