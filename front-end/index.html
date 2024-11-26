@@ -3,21 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Search Query Validator</title>
+    <title>Search Query Fixer</title>
     <link rel="stylesheet" href="../front-end/css/styles.css">
+
 </head>
 <body>
-    <div class="container">
-        <h1>Search Query Validator</h1>
-        <form id="query-form">
-            <label for="search-query">Enter your search query:</label>
-            <input type="text" id="search-query" placeholder="Type your search query here..." required>
-            <button type="submit">Validate</button>
-        </form>
-        <div id="result">
-            <p id="status"></p>
-            <p id="suggestion" class="hidden"></p>
-        </div>
+    <div class="app-container">
+        <header>
+            <h1>Search Query Fixer</h1>
+            <p>Evaluate your search query and get suggestions if needed.</p>
+        </header>
+        <main>
+            <form id="query-form" class="form">
+                <label for="search-query">Enter your search query:</label>
+                <input 
+                    type="text" 
+                    id="search-query" 
+                    class="input-box" 
+                    placeholder="Type your search query here..." 
+                    required
+                >
+                <button type="submit" class="btn-submit">Evaluate</button>
+            </form>
+            <div id="result" class="result">
+                <p id="status"></p>
+                <p id="suggestion" class="suggestion hidden"></p>
+            </div>
+        </main>
+        <footer>
+            <p>&copy; Google2D Search Query Fixer</p>
+        </footer>
     </div>
     <script src="script.js"></script>
 </body>

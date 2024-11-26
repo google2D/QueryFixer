@@ -1,38 +1,38 @@
 from flask import Flask, request, jsonify
-from flask_cors import CORS
-import openai
+from your_ml_model import classify_query  # Your ML model logic
+import openai  # OpenAI library for GPT integration
 
-# Initialize Flask app and enable CORS
+# Initialize Flask app
 app = Flask(__name__)
-CORS(app)
 
-# Set your OpenAI API key
-openai.api_key = '':
+# OpenAI API Key
+openai.api_key = "your-openai-api-key"
 
-@app.route('/fix-query', methods=['POST'])
-def fix_query():
-    # Get the query from the request payload
-    user_query = request.json.get('query')
+@app.route("/evaluate-query", methods=["POST"])
+def evaluate_query():
+    data = request.json
+    user_query = data.get("query", "")
 
     if not user_query:
-        return jsonify({'error': 'No query provided'}), 400
+        return jsonify({"error": "Query cannot be empty"}), 400
 
-    # Use OpenAI API to generate a fixed query
-    try:
+    # ML Model: Check if the query is well-formed
+    is_well_formed = classify_query(user_query)  # Replace with your model logic
+
+    # Generate a suggestion if not well-formed
+    suggested_query = None
+    if not is_well_formed:
         response = openai.Completion.create(
-            model="gpt-4o-mini",  # Or your preferred model
-            prompt=f"Fix this search query: {user_query}",
+            model="text-davinci-003",  # Replace with the relevant OpenAI model
+            prompt=f"Fix this search query to be well-formed: {user_query}",
             max_tokens=50
         )
+        suggested_query = response.choices[0].text.strip()
 
-        # Get the fixed query from OpenAI response
-        fixed_query = response.choices[0].text.strip()
+    return jsonify({
+        "isWellFormed": is_well_formed,
+        "suggestedQuery": suggested_query
+    })
 
-        return jsonify({'original': user_query, 'fixed': fixed_query})
-
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
-
-# Run the Flask app
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.run(debug=True)
