@@ -3,6 +3,8 @@
 
 ## Classifer:
 
+The classifier api endpoint will accept a query, pass the query through a pre-trained binary classification model, and respond with whether that query is well-formed or not well-formed.
+
 ### To start classifier Flask API:
 
 1. Install neccessary packages.
