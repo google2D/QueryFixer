@@ -1,17 +1,17 @@
-from QueryClassifier import QueryClassifier
+from Classifier.QueryClassifier import QueryClassifier
 import torch
 import torch.nn as nn
 
 class Model:
-    def __init__(self, model_path):
-        self.model = self.load_model(model_path)
+    def __init__(self):
+        self.model = self.load_model("Backend\Classifier\model.pth")
         self.freeze_batchnorm()
         self.model.eval()
 
     # Function to load the classification model
     def load_model(self, model_path):
         model = QueryClassifier(input_size=768)
-        model.load_state_dict(torch.load('model.pth', map_location=torch.device('cpu')))
+        model.load_state_dict(torch.load(model_path, map_location=torch.device('cpu')))
         return model
 
     def freeze_batchnorm(self):

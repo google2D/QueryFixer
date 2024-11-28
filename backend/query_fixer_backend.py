@@ -1,38 +1,57 @@
 from flask import Flask, request, jsonify
-from your_ml_model import classify_query  # Your ML model logic
-import openai  # OpenAI library for GPT integration
+from Classifier.Model import Model
+from Classifier.Encoder import Encoder
+from dotenv import load_dotenv
+import os
+import openai  
 
 # Initialize Flask app
 app = Flask(__name__)
 
-# OpenAI API Key
-openai.api_key = "your-openai-api-key"
+# Load the .env file and set open AI API key
+load_dotenv()
+openai.api_key = os.getenv('OPEN_AI_API_KEY')
+
+# Initialize model and encoder classes
+model = Model()
+encoder = Encoder()
 
 @app.route("/evaluate-query", methods=["POST"])
 def evaluate_query():
-    data = request.json
-    user_query = data.get("query", "")
+    try:
+        # Get the JSON data from the request
+        data = request.get_json()
+        
+        # Extract the query parameter 
+        query = data.get('query', '')  
+        
+        # Check if the query parameter exists
+        if not query:
+            return jsonify({"error": "No query provided"}), 400
+        
+        # Encode the query
+        embedded_query_tensor = encoder.bert_encode_sequence(query)
 
-    if not user_query:
-        return jsonify({"error": "Query cannot be empty"}), 400
+        # Pass query through classifier model to check if it is well-formed
+        is_well_formed = True if model.is_well_formed(embedded_query_tensor) else False
+        print(is_well_formed)
+        # Generate a suggestion if not well-formed
+        suggested_query = ""
+        if not is_well_formed and openai.api_key:
+            response = openai.Completion.create(
+                model="text-davinci-003",  # Replace with the relevant OpenAI model
+                prompt=f"Fix this search query to be well-formed: {query}",
+                max_tokens=50
+            )
+            suggested_query = response.choices[0].text.strip()
 
-    # ML Model: Check if the query is well-formed
-    is_well_formed = classify_query(user_query)  # Replace with your model logic
+        return jsonify({
+            "is_well_formed": is_well_formed,
+            "suggested_query": suggested_query
+        })
 
-    # Generate a suggestion if not well-formed
-    suggested_query = None
-    if not is_well_formed:
-        response = openai.Completion.create(
-            model="text-davinci-003",  # Replace with the relevant OpenAI model
-            prompt=f"Fix this search query to be well-formed: {user_query}",
-            max_tokens=50
-        )
-        suggested_query = response.choices[0].text.strip()
-
-    return jsonify({
-        "isWellFormed": is_well_formed,
-        "suggestedQuery": suggested_query
-    })
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400
 
 if __name__ == "__main__":
     app.run(debug=True)

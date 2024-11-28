@@ -1,3 +1,6 @@
-openai==1.54.5
 flask==3.1.0
-# any other required packages
+transformers==4.46.3   
+torch==2.5.1           
+python-dotenv==1.0.1 
+openai==0.28.0         
+
