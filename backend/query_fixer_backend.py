@@ -2,11 +2,14 @@ from flask import Flask, request, jsonify
 from Classifier.Model import Model
 from Classifier.Encoder import Encoder
 from dotenv import load_dotenv
+from flask_cors import CORS
+
 import os
 import openai  
 
 # Initialize Flask app
 app = Flask(__name__)
+CORS(app)
 
 # Load the .env file and set open AI API key
 load_dotenv()
@@ -34,7 +37,7 @@ def evaluate_query():
 
         # Pass query through classifier model to check if it is well-formed
         is_well_formed = True if model.is_well_formed(embedded_query_tensor) else False
-        print(is_well_formed)
+        
         # Generate a suggestion if not well-formed
         suggested_query = ""
         if not is_well_formed and openai.api_key:
@@ -45,6 +48,7 @@ def evaluate_query():
             )
             suggested_query = response.choices[0].text.strip()
 
+     
         return jsonify({
             "is_well_formed": is_well_formed,
             "suggested_query": suggested_query

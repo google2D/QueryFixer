@@ -20,12 +20,12 @@ document.getElementById("query-form").addEventListener("submit", async (event) =
 
         if (response.ok) {
             const data = await response.json();
-            status.textContent = data.isWellFormed
+            status.textContent = data.is_well_formed
                 ? "Your search query is well-formed."
                 : "Your search query is not well-formed.";
 
             // Display suggestion if not well-formed
-            if (!data.isWellFormed) {
+            if (!data.is_well_formed) {
                 suggestion.textContent = `Suggested query: ${data.suggestedQuery}`;
                 suggestion.classList.remove("hidden");
             }
