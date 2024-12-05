@@ -1,5 +1,22 @@
 # QueryFixer
 
+## Frontend:
+
+The frontend is a simple web application that asks for a search query. When submitted, the frontend will display whether the query is well-formed or not and if it is not, it will offer a well-formed version of the query.
+
+### To start the frontend:
+
+Run the following commands:
+
+        cd Frontend
+        python -m http.server 8000
+
+Alternatively, you can follow these steps:
+
+1. Open VS Code and ensure you have the Live Server extension installed.
+
+2. Right click on the Frontend/index.html file and select the live server option.
+
 
 ## Backend API:
 
